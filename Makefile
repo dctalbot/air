@@ -1,4 +1,4 @@
-.PHONY: regendb schema dump start
+.PHONY: regendb schema.sql dump.sql start
 
 CONN_STR="postgres://postgres:${PW}@localhost:15432"
 
