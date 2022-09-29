@@ -16,6 +16,7 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE IF EXISTS ONLY public.latest DROP CONSTRAINT IF EXISTS uniq_at;
 DROP TABLE IF EXISTS public.latest;
 SET default_tablespace = '';
 
@@ -42,6 +43,14 @@ CREATE TABLE public.latest (
 
 
 ALTER TABLE public.latest OWNER TO postgres;
+
+--
+-- Name: latest uniq_at; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.latest
+    ADD CONSTRAINT uniq_at UNIQUE (at);
+
 
 --
 -- PostgreSQL database dump complete
