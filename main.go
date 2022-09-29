@@ -26,6 +26,7 @@ func main() {
 		return
 	}
 
+	// I only own 1 device, so that's the one we're using :)
 	data := awair.GetLatest(devices[0])
 
 	db, err := sql.Open("pgx", os.Getenv("DB_CONN_STR"))
