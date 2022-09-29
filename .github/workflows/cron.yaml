@@ -1,0 +1,16 @@
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    env:
+      AWAIR_TOKEN: ${{ secrets.AWAIR_TOKEN }}
+      DB_CONN_STR: ${{ secrets.DB_CONN_STR }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.19"
+      - run: go run main.go
