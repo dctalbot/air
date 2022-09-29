@@ -1,5 +1,7 @@
 package awair
 
+import "time"
+
 type Device struct {
 	Name         string
 	DeviceID     int
@@ -31,10 +33,28 @@ type Datapoint struct {
 }
 
 type AirDatum struct {
-	Timestamp string
+	Timestamp time.Time
 	Score     int
 	Sensors   []Datapoint
 	Indices   []Datapoint
+}
+
+func (d AirDatum) Sensor(comp string) float32 {
+	for _, s := range d.Sensors {
+		if s.Comp == comp {
+			return s.Value
+		}
+	}
+	return -1
+}
+
+func (d AirDatum) Index(comp string) float32 {
+	for _, s := range d.Indices {
+		if s.Comp == comp {
+			return s.Value
+		}
+	}
+	return -1
 }
 
 type AirDataResponse struct {
