@@ -37,7 +37,7 @@ func main() {
 	defer db.Close()
 
 	_, err = db.Exec(`
-	INSERT INTO latest (at, score, voc, co2, temp, pm25, humidity, voc_index, co2_index, temp_index, pm25_index, humidity_index) 
+	INSERT INTO air (at, score, voc, co2, temp, pm25, humidity, voc_index, co2_index, temp_index, pm25_index, humidity_index) 
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
 		data.Timestamp,
 		data.Score,

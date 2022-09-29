@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.4 (Debian 14.4-1.pgdg110+1)
+-- Dumped from database version 12.11
 -- Dumped by pg_dump version 14.5 (Homebrew)
 
 SET statement_timeout = 0;
@@ -16,17 +16,17 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER TABLE IF EXISTS ONLY public.latest DROP CONSTRAINT IF EXISTS uniq_at;
-DROP TABLE IF EXISTS public.latest;
+ALTER TABLE IF EXISTS ONLY public.air DROP CONSTRAINT IF EXISTS uniq_at;
+DROP TABLE IF EXISTS public.air;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: latest; Type: TABLE; Schema: public; Owner: postgres
+-- Name: air; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.latest (
+CREATE TABLE public.air (
     at timestamp with time zone NOT NULL,
     score smallint NOT NULL,
     voc smallint NOT NULL,
@@ -42,14 +42,24 @@ CREATE TABLE public.latest (
 );
 
 
-ALTER TABLE public.latest OWNER TO postgres;
+ALTER TABLE public.air OWNER TO postgres;
 
 --
--- Name: latest uniq_at; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: air uniq_at; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.latest
+ALTER TABLE ONLY public.air
     ADD CONSTRAINT uniq_at UNIQUE (at);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM rdsadmin;
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
