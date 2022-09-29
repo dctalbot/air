@@ -2,6 +2,7 @@ package awair
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -12,38 +13,8 @@ import (
 const BaseURL = "https://developer-apis.awair.is"
 const DevicesURL = BaseURL + "/v1/users/self/devices"
 
-type Device struct {
-	Name         string
-	DeviceID     int
-	DeviceType   string
-	DeviceUUID   string
-	Latitude     float32
-	Longitude    float32
-	Preference   string
-	LocationName string
-	RoomType     string
-	SpaceType    string
-	MacAddress   string
-	Timezone     string
-}
-
-type DevicesResponse struct {
-	Devices []Device
-}
-
-type DevicesURLConfig struct {
-	DeviceType string
-	DeviceID   string
-	Fahrenheit bool
-}
-
-func MakeDevicesURL(cfg DevicesURLConfig) string {
-	return BaseURL + "/v1/users/self/devices/{{device_type}}/{{device_id}}/air-data/latest?fahrenheit={{fahrenheit}}"
-}
-
-func GetDeviceID() int {
+func GetDevices() []Device {
 	httpClient := &http.Client{Timeout: 10 * time.Second}
-
 	req, err := http.NewRequest("GET", DevicesURL, nil)
 	req.Header.Add("Authorization", "Bearer "+os.Getenv("AWAIR_TOKEN"))
 	if err != nil {
@@ -67,10 +38,39 @@ func GetDeviceID() int {
 		log.Println(err)
 	}
 
-	if len(respObj.Devices) == 0 {
-		log.Fatal("No devices found")
-		return 0
+	return respObj.Devices
+}
+
+func GetLatest(d Device) (result AirDatum) {
+	httpClient := &http.Client{Timeout: 10 * time.Second}
+	url := fmt.Sprintf("%s/v1/users/self/devices/%s/%d/air-data/latest?fahrenheit=true", BaseURL, d.DeviceType, d.DeviceID)
+	req, err := http.NewRequest("GET", url, nil)
+	req.Header.Add("Authorization", "Bearer "+os.Getenv("AWAIR_TOKEN"))
+	if err != nil {
+		log.Println(err)
 	}
 
-	return respObj.Devices[0].DeviceID
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+	}
+
+	var respObj AirDataResponse
+	err = json.Unmarshal(data, &respObj)
+	if err != nil {
+		log.Println(err)
+	}
+
+	if len(respObj.Data) != 1 {
+		log.Println("Expected 1 result, got", len(respObj.Data))
+		return result
+	}
+
+	return respObj.Data[0]
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -14,7 +13,14 @@ func main() {
 		return
 	}
 
-	deviceID := awair.GetDeviceID()
+	devices := awair.GetDevices()
+	if len(devices) == 0 {
+		log.Fatal("No devices found")
+		return
+	}
 
-	fmt.Println("deviceID:", deviceID)
+	latest := awair.GetLatest(devices[0])
+
+	log.Printf("Latest: %+v", latest)
+
 }
