@@ -1,3 +1,5 @@
+# air
+
 ## Getting Started
 
 ```
@@ -5,7 +7,7 @@ export PGPASSWORD=***
 make start
 ```
 
-Some other useful targets for development:
+### other useful targets for development:
 
 ```
 make regendb
