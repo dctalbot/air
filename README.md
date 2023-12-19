@@ -3,7 +3,7 @@
 ## Getting Started
 
 ```
-export PGPASSWORD=***
+export PGPASSWORD=****
 make start
 ```
 
